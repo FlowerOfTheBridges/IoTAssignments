@@ -1,0 +1,10 @@
+.DS_Store
+
+# Elastic Beanstalk CLI Files
+.elasticbeanstalk/*
+
+# res folder of the project 
+static/resources/root-CA.crt
+static/resources/virtualstation.cert.pem
+static/resources/virtualstation.private.key
+static/resources/config.json

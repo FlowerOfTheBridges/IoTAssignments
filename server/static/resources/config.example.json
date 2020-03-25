@@ -1,0 +1,9 @@
+{
+    "keyPath": ".\\resources\\virtualstation.private.key",
+    "certPath": ".\\resources\\virtualstation.cert.pem",
+    "caPath": ".\\resources\\root-CA.crt",
+    "clientId": "iot-hw1-",
+    "topic": "your topic",
+    "host": "aws host",
+    "token": "your open weather token"  
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Weather</title>
+     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+    
+    
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+        var getLatest =  function() {
+          $.ajax({
+            url:"/latest",
+            type:"POST",
+            data:null,
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            success: function(data) {
+                    console.log(data);
+                    let date = new Date(data.ts).toLocaleString();
+                    $("#latestTs").text("Last update: "+date);
+                    $('#latestTable tbody').empty();
+                    Object.keys(data.stations).forEach(function(key) {
+                      var station = data.stations[key];
+                      $("#latestTable").find('tbody')
+                          .append($('<tr>')
+                            .append($('<td>').text(station.name))
+                            .append($('<td>').text(station.sensors.temperature.value.toFixed(2)))
+                            .append($('<td>').text(station.sensors.humidity.value))
+                            .append($('<td>').text(station.sensors.windintensity.value))
+                            .append($('<td>').text(station.sensors.winddir.value))
+                            .append($('<td>').text(station.sensors.rain.value))
+                          );
+                              
+                    });
+
+                    if($("#sensors option").length <= 1)
+                    {
+                      data.availableSensors && data.availableSensors.forEach(option => {
+                        $("#sensors").append(new Option(option.n, option.v));
+                      });
+                    }
+                  }
+          });
+        }
+
+        var getLast =  function(sensorName) {
+          $.ajax({
+            url:"/last",
+            type:"POST",
+            data:JSON.stringify({sensor: sensorName}),
+            contentType:"application/json; charset=utf-8",
+            dataType:"json",
+            success: function(data) {
+                    console.log(data);
+                    if(data){
+                      let date = new Date(data.ts).toLocaleString();
+                      $("#lastTs").text("Sensor measurements starting from: "+date);
+                      $('#lastTable tbody').empty();
+                      data.sensorList && data.sensorList.forEach(function(obj) {
+                        $("#lastTable").find('tbody')
+                            .append($('<tr>')
+                              .append($('<td>').text(obj.name))
+                              .append($('<td>').text(obj.value.toFixed(2)))
+                              .append($('<td>').text(new Date(obj.ts).toLocaleString()))
+                            );       
+                      });
+
+                    }
+                  }
+          });
+        }
+        getLatest();
+        $("#refresh").click(getLatest);
+        $('#sensors').change(function(){
+          let data= $(this).val();
+          data && data!="" && getLast(data);           
+        });
+      })
+      </script>
+  </head>
+  
+  
+  <body>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Weather Channel</h1>
+        <p class="lead">First homework for the IoT course.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <b>Latest values retrieved by virtual stations:</b>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default btn-sm" id="refresh">
+            <span class="glyphicon glyphicon-refresh" ></span> Refresh
+          </button>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <p id="latestTs">Not yet updated.</p>
+      </div>
+    </div>
+    <div class="container">
+            
+      <table class="table table-striped" id="latestTable">
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Wind Height</th>
+            <th>Wind Direction</th>
+            <th>Rain Height</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <b>Latest values retrieved by virtual stations:</b>
+        </div>
+        <div class="col-sm-4">
+          <select title="Available sensors" id="sensors" data-live-search="true" data-live-search-placeholder="Find sensor">
+            <option value=""></option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-auto">
+        <p id="lastTs">Not yet updated.</p>
+      </div>
+    </div>
+    <div class="container">
+            
+      <table class="table table-striped" id="lastTable">
+        <thead>
+          <tr>
+            <th>City</th>
+            <th>Value</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

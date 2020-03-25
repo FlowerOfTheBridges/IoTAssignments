@@ -1,0 +1,15 @@
+{
+  "name": "it_sapienza_iot",
+  "version": "1.0.0",
+  "description": "virtual station for sensor measurement",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-iot-device-sdk": "^2.2.3",
+    "axios": "^0.19.2"
+  }
+}
