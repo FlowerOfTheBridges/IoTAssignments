@@ -25,7 +25,7 @@ After downloading the repository
 ```
 git clone https://github.com/FlowerOfTheBridges/IoTWeatherStation
 ```
-install the following dependencies:
+install the following dependencies using a packet manager of your choice (such as npm):
 
 ```
 npm install axios
