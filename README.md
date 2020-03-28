@@ -11,7 +11,7 @@ This repository contains various material for the assignments made during Intern
 
 This platform has been developed using the tools provided by the [AWS Platform](https://console.aws.amazon.com), such as IoTCore, DynamoDB and ElasticBeanstalk. 
 
-## First assignment: 
+## First assignment
 here the main parts of the infrastructure , such as the client and the web application, are developed using the javascript programming language, upon the Node.js runtime. In particular:
 
 * the station is a CLI application, located in the environment_station that can be launched by using the following command. The values from the sensors are retrieved by calling the [OpenWeather API](https://openweathermap.org/api) and published through the topic provided in the configuration file. Then, we can launch many instances of it by typing
