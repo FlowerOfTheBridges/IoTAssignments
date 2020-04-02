@@ -61,7 +61,7 @@ if (cluster.isMaster) {
     config.certPath = __dirname + config.certPath;
     config.caPath = __dirname + config.caPath;
     
-    var mqttClient = new MqttClient(config);
+    var mqttClient = new MqttClient("AWS", config);
     AWS.config.region = process.env.REGION;
     
     var ddb = new AWS.DynamoDB.DocumentClient();

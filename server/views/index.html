@@ -37,7 +37,7 @@
                       $("#latestTable").find('tbody')
                           .append($('<tr>')
                             .append($('<td>').text(station.name))
-                            .append($('<td>').text(station.sensors.temperature.value.toFixed(2)))
+                            .append($('<td>').text(station.sensors.temperature.value))
                             .append($('<td>').text(station.sensors.humidity.value))
                             .append($('<td>').text(station.sensors.windintensity.value))
                             .append($('<td>').text(station.sensors.winddir.value))
@@ -73,7 +73,7 @@
                         $("#lastTable").find('tbody')
                             .append($('<tr>')
                               .append($('<td>').text(obj.name))
-                              .append($('<td>').text(obj.value.toFixed(2)))
+                              .append($('<td>').text(obj.value))
                               .append($('<td>').text(new Date(obj.ts).toLocaleString()))
                             );       
                       });

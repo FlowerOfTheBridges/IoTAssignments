@@ -1,5 +1,6 @@
 const awsIot = require('aws-iot-device-sdk/');
 const Configuration = require('./entities/configuration');
+const mqtt = require('mqtt');
 
 /**
  * The class MqttClient represent a client which uses the mqtt protocol to
@@ -15,18 +16,23 @@ class MqttClient{
     * 
     * @param {Configuration} config configuration obj retrieved from the config json file placed in the resources folder
     */
-    constructor(config){
-        this.device = awsIot.device({
-            keyPath: config.keyPath,
-            certPath: config.certPath,
-            caPath: config.caPath,
-            clientId: String(config.clientId+Math.random().toString(36).substring(7)),
-            host: config.host
-        });
-     
+    constructor(broker, config){
+        if(broker == 'AWS'){
+            this.device = awsIot.device({
+                keyPath: config.keyPath,
+                certPath: config.certPath,
+                caPath: config.caPath,
+                clientId: String(config.clientId+Math.random().toString(36).substring(7)),
+                host: config.host
+            });
+        }   
+        else if(broker == 'MOSQUITTO'){
+            this.device  = mqtt.connect('mqtt://127.0.0.1', {port: 1886});
+        }
+
         this.device
             .on('connect', (() =>{
-                console.log('connect');
+                console.log('connected to %s broker.', broker);
             }).bind(this));
     }
 

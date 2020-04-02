@@ -11,7 +11,7 @@ const KELVIN_CONVERSION = 273.15;
     -   rain height (0 ... 50 mm / h) 
  */
 class VirtualStation {
-
+    static DEFAULT_ID = 111;
     /**
      * Creates a new virtual station
      * @param {string} name,of the city where the station is placed
@@ -28,7 +28,7 @@ class VirtualStation {
      * @param {JSON} openWeather obj retrieved from api.
      * https://openweathermap.org/current#current_JSON
      */
-    setSensors(openWeather){
+    setSensorsFromOpenWeather(openWeather){
         let ts = new Date().getTime(); // we can use alternatively the ts provided by the openweather response
         this.id = openWeather.id;
         this.sensors = {};
@@ -51,6 +51,27 @@ class VirtualStation {
         this.sensors["rain"] = rainHeight;
     }
 
+    setSensorsFromRiot(temp, hum, windDir, windInt, rain){
+        let ts = new Date().getTime(); 
+        this.id = 111;
+        this.sensors = {};
+        this.ts = ts;
+
+        let temperature = new Sensor(temp, ts); // since openweather returns the temperature in kelvin, we translate it into celsius
+        this.sensors["temperature"] = temperature;
+
+        let humidity = new Sensor(hum, ts);
+        this.sensors["humidity"] = humidity;
+
+        let windIntensity = new Sensor(windDir, ts);
+        this.sensors["windintensity"] = windIntensity;
+
+        let windDirection = new Sensor(windInt, ts);
+        this.sensors["winddir"] = windDirection;
+
+        let rainHeight = new Sensor(rain, ts);
+        this.sensors["rain"] = rainHeight;
+    }
 }
 
 module.exports = VirtualStation.bind(this);

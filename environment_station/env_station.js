@@ -41,7 +41,7 @@ if (require.main === module) {
             this.station = new VirtualStation(city, countryZone);
             this.url = OPENWEATHER_URL.replace("{0}", this.station.name).replace("{1}", this.station.countryZone).replace("{2}", this.config.token);
     
-            this.mqttClient = new MqttClient(this.config);
+            this.mqttClient = new MqttClient("AWS", this.config);
             setInterval(restCall.bind(this), TIMEOUT_DEFAULT_MILLIS);
         }
         
@@ -60,7 +60,7 @@ function restCall() {
     axios.get(this.url).then((msg) =>{
         let data = msg.data ? msg.data : null;
         if(data!=null){
-            this.station.setSensors(data);
+            this.station.setSensorsFromOpenWeather(data);
             this.mqttClient.publish(this.topic, this.station);
         }
         else{
