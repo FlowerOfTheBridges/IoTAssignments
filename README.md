@@ -61,13 +61,13 @@ The weather station now must be deployed in a real microcontroller, so two new c
 run <identifier> <ipv6 address of the broker> <port we're the broker is listening>
 ```
 * *mqttsn_gateway*: is a transparent gateway that translates the MQTT-SN messages of the *RIOT-OS app* in MQTT messages that will be send to *AWS IoT Core platform*. In particular it relies on the core package that was also used on the previous assignment. In particular, this package has the following updates:
-- MQTTClient constructor now needs to have two parameters: *broker* and *config*. While config remains the same as before, *broker* is a string that tells the type of broker we are going to use (it can be one of *AWS* or *MOSQUITTO*, were the latter must be local on port 1886). So in the main procedure main.js we need to create two connections by the usage of the following instructions:
-```javascript
-this.localClient = new MqttClient('MOSQUITTO', null);
-this.awsClient = new MqttClient('AWS', this.config);
-```
-- VirtualStation class now has a new method, *setSensorsFromRiot*, that parses a message of the form 
-```
-<temp>|<hum>|<wind_dir>|<wind_int>|<rain>|<id>
-```
+  - MQTTClient constructor now needs to have two parameters: *broker* and *config*. While config remains the same as before, *broker* is a string that tells the type of broker we are going to use (it can be one of *AWS* or *MOSQUITTO*, were the latter must be local on port 1886). So in the main procedure main.js we need to create two connections by the usage of the following instructions:
+   ```javascript
+   this.localClient = new MqttClient('MOSQUITTO', null);
+   this.awsClient = new MqttClient('AWS', this.config);
+   ```
+  - VirtualStation class now has a new method, *setSensorsFromRiot*, that parses a message of the form 
+  ```
+  <temp>|<hum>|<wind_dir>|<wind_int>|<rain>|<id>
+  ```
 A more hands-on tutorial on how to setup the RIOT application and the broker can be found [on my LinkedIn profile](https://www.linkedin.com/pulse/another-step-through-iot-field-programming-things-fiordeponti/).
