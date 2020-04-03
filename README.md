@@ -57,9 +57,9 @@ alt="Demonstration" width="240" height="180" border="10" /></a>
 ## Second Assignment
 The weather station now must be deployed in a real microcontroller, so two new components were introduced:
 * *riotos_app*: is a [RIOT-OS](https://www.linkedin.com/pulse/first-approach-iot-virtual-enviromental-station-aws-core-fiordeponti) application were random values are published to a default topic of a MQTT-SN Broker (such as [MOSQUITTO.RSMB](https://github.com/eclipse/mosquitto.rsmb)) through a MQTT-SN connection. The command that needs to be prompted in the application shell to run the measurement process is 
-```
-run <identifier> <ipv6 address of the broker> <port we're the broker is listening>
-```
+ ```
+ run <identifier> <ipv6 address of the broker> <port we're the broker is listening>
+ ```
 * *mqttsn_gateway*: is a transparent gateway that translates the MQTT-SN messages of the *RIOT-OS app* in MQTT messages that will be send to *AWS IoT Core platform*. In particular it relies on the core package that was also used on the previous assignment. In particular, this package has the following updates:
   - MQTTClient constructor now needs to have two parameters: *broker* and *config*. While config remains the same as before, *broker* is a string that tells the type of broker we are going to use (it can be one of *AWS* or *MOSQUITTO*, were the latter must be local on port 1886). So in the main procedure main.js we need to create two connections by the usage of the following instructions:
    ```javascript
