@@ -16,9 +16,9 @@ This platform has been developed using the tools provided by the [AWS Platform](
 here the main parts of the infrastructure , such as the client and the web application, are developed using the javascript programming language, upon the Node.js runtime. In particular:
 
 * the station is a CLI application, located in the environment_station that can be launched by using the following command. The values from the sensors are retrieved by calling the [OpenWeather API](https://openweathermap.org/api) and published through the topic provided in the configuration file. Then, we can launch many instances of it by typing
-```
-node .\env_station.js *name of the city* *country code of the city* 
-```
+  ```
+  node .\env_station.js *name of the city* *country code of the city* 
+  ```
 * the web application, located in the server folder, must be filled with the *.ebestension* folder in order to be deployed on *Elastic Beanstalk*.
 
 ### Instructions
@@ -56,7 +56,7 @@ alt="Demonstration" width="240" height="180" border="10" /></a>
 
 ## Second Assignment
 The weather station now must be deployed in a real microcontroller, so two new components were introduced:
-* *riotos_app*: is a [RIOT-OS](https://www.linkedin.com/pulse/first-approach-iot-virtual-enviromental-station-aws-core-fiordeponti) application were random values are published to a default topic of a MQTT-SN Broker (such as [MOSQUITTO.RSMB](https://github.com/eclipse/mosquitto.rsmb)) through a MQTT-SN connection. The command that needs to be prompted in the application shell to run the measurement process is 
+* *riotos_app_mqttsn*: is a [RIOT-OS](https://github.com/RIOT-OS/RIOT) application were random values are published to a default topic of a MQTT-SN Broker (such as [MOSQUITTO.RSMB](https://github.com/eclipse/mosquitto.rsmb)) through a MQTT-SN connection. The command that needs to be prompted in the application shell to run the measurement process is 
  ```
  run <identifier> <ipv6 address of the broker> <port we're the broker is listening>
  ```
@@ -70,4 +70,29 @@ The weather station now must be deployed in a real microcontroller, so two new c
   ```
   <temp>|<hum>|<wind_dir>|<wind_int>|<rain>|<id>
   ```
+### Last remarks
 A more hands-on tutorial on how to setup the RIOT application and the broker can be found [on my LinkedIn profile](https://www.linkedin.com/pulse/another-step-through-iot-field-programming-things-fiordeponti/).
+
+## Third Assignment
+A RIOTOS application that send its data via LoRaWAN protocol can now be deployed by compiling the *riotos_app_lorawn* folder using the command:
+```
+  make -C iot_hw/riotos_app_lorawan clean all
+```
+In particular:
+* the repository must be placed inside the [RIOT folder](https://github.com/RIOT-OS/RIOT) of your system.
+* [arm gcc 7.2 emebbeded toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm) must be installed.
+* the application has one command, *run*, that accepts the following parameters:
+  ```
+  run <deveui> <appeui> <appkey>
+  ```
+  These three parameters are obtained [after registering a device on The Things Network (TTN)](https://www.thethingsnetwork.org/docs/devices/registration.html). 
+  
+In particular a device must be registered with a device id of the form *station_<city_name>*, in order to be recognized correctly by the *ttn_gateway.js* script located inside the *gateway* folder. Its role is to retrieve data from TTN and then send it to AWS. So the following dependencies must be installed inside the gateway folder using a packet manager of your choice (such as NPM):
+```
+npm i ttn
+npm i aws-iot-device-sdk
+```
+In order to make it work, two json files must be placed inside the *gateway/resources* folder, in a format similar to that of the sample files that can be found in the same folder.
+
+### Last remarks
+A more hands-on tutorial on how to setup the RIOT-OS application and the gateway can be found [on my LinkedIn profile](https://www.linkedin.com/pulse/integration-lorawan-communication-aws-iot-cloud-giovanni-fiordeponti/).
