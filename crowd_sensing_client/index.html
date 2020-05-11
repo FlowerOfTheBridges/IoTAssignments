@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+<title>Page Title</title>
+</head>
+<script>
+let sensor = new Accelerometer();
+
+sensor.start();
+
+sensor.onreading = () => {
+    console.log("Acceleration along X-axis: " + sensor.x);
+    console.log("Acceleration along Y-axis: " + sensor.y);
+    console.log("Acceleration along Z-axis: " + sensor.z);
+}
+
+sensor.onerror = event => console.log(event.error.name, event.error.message);
+</script>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+
+</body>
+</html> 
