@@ -14,19 +14,19 @@ window.onload = function(){
 				document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
 				return;
 			}
-		}
 
-		let sensor = new Accelerometer();
+			let sensor = new Accelerometer();
 
-		sensor.start();
+			sensor.start();
 
-		sensor.onreading = () => {
-			document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
-			document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
-			document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
-		}
+			sensor.onreading = () => {
+				document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
+				document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
+				document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
+			}
 
-		sensor.onerror = event => console.log(event.error.name, event.error.message);
+			sensor.onerror = event => console.log(event.error.name, event.error.message);
+		});
 	}
 	catch(e){
 		document.getElementById("error").innerHTML = e.toString();
