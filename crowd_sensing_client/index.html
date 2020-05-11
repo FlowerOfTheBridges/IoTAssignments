@@ -9,6 +9,13 @@
 window.onload = function(){
 	
 	try{
+		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
+			if (result.state === 'denied') {
+				document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
+				return;
+			}
+		}
+
 		let sensor = new Accelerometer();
 
 		sensor.start();
