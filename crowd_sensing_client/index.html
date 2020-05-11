@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <meta charset="UTF-8">
 <head>
 <title>Page Title</title>
 </head>
-<script>
-let sensor = new Accelerometer();
+<script type="text/javascript">
+window.onload = function(){
+	
+	try{
+		let sensor = new Accelerometer();
 
-sensor.start();
+		sensor.start();
 
-sensor.onreading = () => {
-    console.log("Acceleration along X-axis: " + sensor.x);
-    console.log("Acceleration along Y-axis: " + sensor.y);
-    console.log("Acceleration along Z-axis: " + sensor.z);
+		sensor.onreading = () => {
+			document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
+			document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
+			document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
+		}
+
+		sensor.onerror = event => console.log(event.error.name, event.error.message);
+	}
+	catch(e){
+		document.getElementById("error").innerHTML = e.toString();
+	}
 }
-
-sensor.onerror = event => console.log(event.error.name, event.error.message);
 </script>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<h1>User Activity Recognition</h1>
+<p>A simple crowd-sensing model.</p>
+<p id="error">
+<ul>
+  <li id="x">X:</li>
+  <li id="y">Y:</li>
+  <li id="z">Z:</li>
+</ul> 
 
 </body>
 </html> 
