@@ -40,9 +40,10 @@ window.onload = function(){
 
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
 				samples++;
+				document.getElementById("samples").innerHTML = "samples: " + samples;
 				if(samples == 60){
 					let sma = this.sma();	
-					document.getElementById("sma").innerHTML = "SMA: "+sma;
+					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
 					measures = [];
 					samples = 0;
 				}
@@ -70,6 +71,7 @@ window.onload = function(){
 
 <h1>User Activity Recognition</h1>
 <p>A simple crowd-sensing model.</p>
+<p id="samples">samples</p>
 <p id="error"></p>
 <ul>
   <li id="x">X:</li>
