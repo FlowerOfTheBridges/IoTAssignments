@@ -17,7 +17,7 @@ function sma(){
 		sum += (Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z));
 	})
 
-    return sum / measures.length;
+    return Math.sqrt(sum / measures.length);
 }
 window.onload = function(){
 	
