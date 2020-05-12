@@ -6,6 +6,19 @@
 <title>Page Title</title>
 </head>
 <script type="text/javascript">
+
+var measures = [];
+var samples = 0;
+
+function sma(){
+	let sum = 0;
+
+	measures.forEach( measure => {
+		sum += (Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z));
+	})
+
+    return sum / measures.length;
+}
 window.onload = function(){
 	
 	try{
@@ -15,21 +28,41 @@ window.onload = function(){
 				return;
 			}
 
-			let sensor = new Accelerometer();
+			let sensor = new Accelerometer({frequency: 1});
 
 			sensor.start();
 
+			
 			sensor.onreading = () => {
 				document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
 				document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
 				document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
+
+				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
+				samples++;
+				if(samples == 60){
+					let sma = this.sma();	
+					document.getElementById("sma").innerHTML = "SMA: "+sma;
+					measures = [];
+					samples = 0;
+				}
+				
 			}
 
 			sensor.onerror = event => console.log(event.error.name, event.error.message);
 		});
 	}
 	catch(e){
-		document.getElementById("error").innerHTML = e.toString();
+		let errorMsg = "";
+		
+		if (error.name === 'SecurityError') {
+			errorMsg = 'Sensor construction was blocked by the Feature Policy.';
+		} else if (error.name === 'ReferenceError') {
+			errorMsg = 'Sensor is not supported by the User Agent.';
+		} else {
+			errorMsg = 'Error'
+		}
+		document.getElementById("error").innerHTML = errorMsg;
 	}
 }
 </script>
