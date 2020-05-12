@@ -39,17 +39,15 @@ window.onload = function(){
 				document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
 
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
-				samples++;
 
-				if(samples == 60){
+				if(measures.length == 10){
 
 					let sma = this.sma();	
 					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
 					
-					document.getElementById("status").innerHTML = "Status: "+ (sma/60 >= 1.5 ? "Moving" : "Stand still");
+					document.getElementById("status").innerHTML = "Status: "+ (sma >= 2.5 ? "Moving" : "Stand still");
 					
 					measures.shift();
-					samples--;
 				}
 				
 			}
