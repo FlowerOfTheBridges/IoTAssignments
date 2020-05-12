@@ -14,7 +14,7 @@ function sma(){
 	let sum = 0;
 
 	measures.forEach( measure => {
-		sum += (Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z));
+		sum += Math.sqrt(Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z));
 	})
 
     return Math.sqrt(sum / measures.length);
@@ -40,7 +40,7 @@ window.onload = function(){
 
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
 				samples++;
-				document.getElementById("samples").innerHTML = "samples: " + samples;
+				
 				if(samples == 2){
 					let sma = this.sma();	
 					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
@@ -74,7 +74,6 @@ window.onload = function(){
 
 <h1>User Activity Recognition</h1>
 <p>A simple crowd-sensing model.</p>
-<p id="samples">samples</p>
 <p id="status">Status:</p>
 <p id="error"></p>
 <ul>
