@@ -14,7 +14,7 @@ function sma(){
 	let sum = 0;
 
 	measures.forEach( measure => {
-		sum += Math.sqrt(Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z));
+		sum += Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z);
 	})
 
     return Math.sqrt(sum / measures.length);
@@ -40,15 +40,16 @@ window.onload = function(){
 
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
 				samples++;
-				
-				if(samples == 2){
+
+				if(samples == 60){
+
 					let sma = this.sma();	
 					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
 					
-					document.getElementById("status").innerHTML = "Status: "+ (sma >= 1.5 ? "Moving" : "Stand still");
+					document.getElementById("status").innerHTML = "Status: "+ (sma/60 >= 1.5 ? "Moving" : "Stand still");
 					
-					measures = [];
-					samples = 0;
+					measures.shift();
+					samples--;
 				}
 				
 			}
