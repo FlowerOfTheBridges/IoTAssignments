@@ -25,7 +25,7 @@ function step(sma){
 	let sum = 0;
 
 	measures.forEach( measure => {
-		sum += Math.pow(abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z) - sma);
+		sum += Math.pow(abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z) - sma,2);
 	});
 
 	return Math.sqrt(sum / measures.length);
@@ -40,7 +40,7 @@ window.onload = function(){
 				return;
 			}
 
-			let sensor = new Accelerometer({frequency: 1});
+			let sensor = new LinearAccelerationSensor({frequency: 1});
 
 			sensor.start();
 
@@ -53,14 +53,14 @@ window.onload = function(){
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
 
 				if(measures.length == 10){
-
 					let sma = this.sma();	
 					let step = this.step(sma);
+
 					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
 					document.getElementById("step").innerHTML = "STEP: "+step+" ("+new Date()+")";
 					document.getElementById("status").innerHTML = "Status: "+ (step >= 1.5 ? "Moving" : "Stand still");
 					
-					measures.shift();
+					measures = [];
 				}
 				
 			}
