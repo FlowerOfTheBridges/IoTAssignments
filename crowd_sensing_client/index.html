@@ -9,6 +9,7 @@
 
 var measures = [];
 var samples = 0;
+var deviation = 0;
 
 function sma(){
 	let sum = 0;
@@ -17,8 +18,19 @@ function sma(){
 		sum += Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z);
 	})
 
-    return Math.sqrt(sum / measures.length);
+    return sum / measures.length;
 }
+
+function step(sma){
+	let sum = 0;
+
+	measures.forEach( measure => {
+		sum += Math.pow(abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z) - sma);
+	});
+
+	return Math.sqrt(sum / measures.length);
+}
+
 window.onload = function(){
 	
 	try{
@@ -43,9 +55,10 @@ window.onload = function(){
 				if(measures.length == 10){
 
 					let sma = this.sma();	
+					let step = this.step(sma);
 					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
-					
-					document.getElementById("status").innerHTML = "Status: "+ (sma >= 2.5 ? "Moving" : "Stand still");
+					document.getElementById("step").innerHTML = "STEP: "+step+" ("+new Date()+")";
+					document.getElementById("status").innerHTML = "Status: "+ (step >= 1.5 ? "Moving" : "Stand still");
 					
 					measures.shift();
 				}
@@ -81,6 +94,7 @@ window.onload = function(){
   <li id="z">Z:</li>
 </ul> 
 <p id="sma"></p>
+<p id="step"></p>
 
 </body>
 </html> 
