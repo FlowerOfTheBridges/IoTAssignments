@@ -44,7 +44,6 @@ window.onload = function(){
 
 			sensor.start();
 
-			
 			sensor.onreading = () => {
 				document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
 				document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
@@ -52,12 +51,14 @@ window.onload = function(){
 
 				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
 
+				document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
+
 				if(measures.length == 10){
 					let sma = this.sma();	
 					let step = this.step(sma);
 
-					document.getElementById("sma").innerHTML = "SMA: "+sma+" ("+new Date()+")";
-					document.getElementById("step").innerHTML = "STEP: "+step+" ("+new Date()+")";
+					document.getElementById("sma").innerHTML = "SMA: "+sma;
+					document.getElementById("step").innerHTML = "STEP: "+step;
 					document.getElementById("status").innerHTML = "Status: "+ (step >= 1.5 ? "Moving" : "Stand still");
 					
 					measures = [];
@@ -81,6 +82,7 @@ window.onload = function(){
 		document.getElementById("error").innerHTML = errorMsg;
 	}
 }
+
 </script>
 <body>
 
@@ -93,6 +95,7 @@ window.onload = function(){
   <li id="y">Y:</li>
   <li id="z">Z:</li>
 </ul> 
+<p id="samples">Samples:</p>
 <p id="sma"></p>
 <p id="step"></p>
 
