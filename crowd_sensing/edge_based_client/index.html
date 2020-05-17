@@ -34,7 +34,7 @@ function step(sma){
 }
 
 window.onbeforeunload = function(){
-    xhr.open('GET', '//crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/stop', true);
+    xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/stop', true);
 	xhr.send(null);
 	sensor && sensor.stop();
     return false;
@@ -43,7 +43,7 @@ window.onload = function(){
 	
 	try{
 		
-		xhr.open('GET', '//crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/start', true);
+		xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/start', true);
 		xhr.send(null);
 		sid = document.cookie.match('userId=([^;]*)')[1];
 		if(sid!=null){
