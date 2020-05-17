@@ -34,8 +34,6 @@ function step(sma){
 }
 
 window.onbeforeunload = function(){
-    xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/stop', true);
-	xhr.send(null);
 	sensor && sensor.stop();
     return false;
 }
@@ -45,14 +43,8 @@ window.onload = function(){
 		
 		xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/start', true);
 		xhr.send(null);
-		sid = document.cookie.match('userId=([^;]*)')[1];
-		if(sid!=null){
-			document.getElementById("user").innerHTML = "User id: "+sid;
-		}
-		else{
-			document.getElementById("user").innerHTML = "No session was created";
-			return;
-		}
+		console.log(document.cookie);
+
 		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
 			if (result.state === 'denied') {
 				document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
@@ -103,6 +95,7 @@ window.onload = function(){
 }
 
 </script>
+</head>
 <body>
 
 <h1>User Activity Recognition</h1>
