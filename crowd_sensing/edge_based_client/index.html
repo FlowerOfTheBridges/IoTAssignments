@@ -63,7 +63,7 @@ window.onload = function(){
 		
 		// Connection opened
 		socket.addEventListener('open', (function (event) {
-    		document.getElementById("received").innerHTML = "Connection to AWS established! With id: "+uuid;
+    		document.getElementById("received").innerHTML = "Connection to AWS established! With id: "+id;
 		}).bind(this));
 
 		// Listen for messages
@@ -97,7 +97,7 @@ window.onload = function(){
 					document.getElementById("sma").innerHTML = "SMA: "+sma;
 					document.getElementById("step").innerHTML = "STEP: "+steps;
 					document.getElementById("status").innerHTML = "Status: "+ (steps >= 1.5 ? "Moving" : "Stand still");
-					socket.send({action: "store", data:{ts: Date.now(), id: uuid, measures: measures, steps: steps, status: steps >= 1.5 ? 1 : 0}});
+					socket.send({action: "store", data:{ts: Date.now(), id: id, measures: measures, steps: steps, status: steps >= 1.5 ? 1 : 0}});
 					measures = [];
 				}
 				
