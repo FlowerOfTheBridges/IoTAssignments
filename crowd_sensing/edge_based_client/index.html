@@ -102,7 +102,7 @@ window.onload = function(){
 					document.getElementById("sma").innerHTML = "SMA: "+sma;
 					document.getElementById("step").innerHTML = "STEP: "+steps;
 					document.getElementById("status").innerHTML = "Status: "+ (steps >= 1.5 ? "Moving" : "Stand still");
-					socket.send({action: "store", data:{ts: Date.now(), id: id, measures: measures, steps: steps, status: steps >= 1.5 ? 1 : 0}});
+					socket.send(JSON.stringify({action: "store", data:{ts: Date.now(), id: id, measures: measures, steps: steps, status: steps >= 1.5 ? 1 : 0}}));
 					measures = [];
 				}
 				
