@@ -8,10 +8,25 @@
 </head>
 <script type="text/javascript">
 
+function generateId() {
+	// http://www.ietf.org/rfc/rfc4122.txt
+	let s = [];
+        let hexDigits = "0123456789abcdef";
+        for (let i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+		let uuid = s.join("");
+		return uuid;
+}
+
 var measures = [];
 var samples = 0;
 var deviation = 0;
-var xhr = new XMLHttpRequest();
+var id = generateId();
 
 function sma(){
 	let sum = 0;
@@ -33,6 +48,7 @@ function step(sma){
 	return Math.sqrt(sum / measures.length);
 }
 
+
 window.onbeforeunload = function(){
 	sensor && sensor.stop();
     return false;
@@ -40,10 +56,20 @@ window.onbeforeunload = function(){
 window.onload = function(){
 	
 	try{
+		// Create WebSocket connection.
+		const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/prova');
+
 		
-		xhr.open('GET', '//crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/start', true);
-		xhr.send(null);
-		console.log(document.cookie);
+		
+		// Connection opened
+		socket.addEventListener('open', (function (event) {
+    		document.getElementById("received").innerHTML = "Connection to AWS established! With id: "+uuid;
+		}).bind(this));
+
+		// Listen for messages
+		socket.addEventListener('message', function (event) {
+			document.getElementById("received").innerHTML = "Received: "+event.data;
+		});
 
 		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
 			if (result.state === 'denied') {
@@ -60,18 +86,18 @@ window.onload = function(){
 				document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
 				document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
 
-				measures.push({x: sensor.x, y: sensor.y, z: sensor.z});
+				measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now});
 
 				document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
 
 				if(measures.length == 10){
 					let sma = this.sma();	
-					let step = this.step(sma);
+					let steps = this.step(sma);
 
 					document.getElementById("sma").innerHTML = "SMA: "+sma;
-					document.getElementById("step").innerHTML = "STEP: "+step;
-					document.getElementById("status").innerHTML = "Status: "+ (step >= 1.5 ? "Moving" : "Stand still");
-					
+					document.getElementById("step").innerHTML = "STEP: "+steps;
+					document.getElementById("status").innerHTML = "Status: "+ (steps >= 1.5 ? "Moving" : "Stand still");
+					socket.send({action: "store", data:{ts: Date.now(), id: uuid, measures: measures, steps: steps, status: steps >= 1.5 ? 1 : 0}});
 					measures = [];
 				}
 				
@@ -88,7 +114,7 @@ window.onload = function(){
 		} else if (error.name === 'ReferenceError') {
 			errorMsg = 'Sensor is not supported by the User Agent.';
 		} else {
-			errorMsg = 'Error'
+			errorMsg = 'Error: '+e;
 		}
 		document.getElementById("error").innerHTML = errorMsg;
 	}
@@ -111,6 +137,7 @@ window.onload = function(){
 <p id="samples">Samples:</p>
 <p id="sma"></p>
 <p id="step"></p>
+<p id="received"></p>
 
 </body>
 </html> 
