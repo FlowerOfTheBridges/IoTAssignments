@@ -10,6 +10,7 @@
 var measures = [];
 var samples = 0;
 var deviation = 0;
+var xhr = new XMLHttpRequest();
 
 function sma(){
 	let sum = 0;
@@ -31,16 +32,33 @@ function step(sma){
 	return Math.sqrt(sum / measures.length);
 }
 
+window.onbeforeunload = function(){
+    xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/stop', true);
+	xhr.send(null);
+	sensor && sensor.stop();
+    return false;
+}
 window.onload = function(){
 	
 	try{
+		
+		xhr.open('GET', 'http://crowdsensing-env-1.eba-apr5bpbg.us-east-1.elasticbeanstalk.com/start', true);
+		xhr.send(null);
+		sid = document.cookie.match('userId=([^;]*)')[1];
+		if(sid!=null){
+			document.getElementById("user").innerHTML = "User id: "+sid;
+		}
+		else{
+			document.getElementById("user").innerHTML = "No session was created";
+			return;
+		}
 		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
 			if (result.state === 'denied') {
 				document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
 				return;
 			}
 
-			let sensor = new LinearAccelerationSensor({frequency: 1});
+			var sensor = new LinearAccelerationSensor({frequency: 1});
 
 			sensor.start();
 
@@ -88,6 +106,7 @@ window.onload = function(){
 
 <h1>User Activity Recognition</h1>
 <p>A simple crowd-sensing model.</p>
+<p id="user">User: </p>
 <p id="status">Status:</p>
 <p id="error"></p>
 <ul>
