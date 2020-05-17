@@ -71,6 +71,11 @@ window.onload = function(){
 			document.getElementById("received").innerHTML = "Received: "+event.data;
 		});
 
+		// Listen for messages
+		socket.addEventListener('error', function (event) {
+			document.getElementById("received").innerHTML = "Received: "+event.data;
+		});
+
 		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
 			if (result.state === 'denied') {
 				document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
