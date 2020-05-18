@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Edge Based Crowd Sensing</title>
+  <title>Cloud Based Crowd Sensing</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -38,7 +38,11 @@
 
 			// Listen for messages
 			socket.addEventListener('message', (function (event) {
-				//document.getElementById("received").innerHTML = "Status ("+(event.data == 1 ? "moving" : "stand still")+") updated correctly.";
+        document.getElementById("update").innerHTML = "Measures: ("+new Date()+")";
+				document.getElementById("sma").innerHTML = "SMA: "+event.sma;
+        document.getElementById("steps").innerHTML = "Steps: "+event.steps;
+        document.getElementById("statusText").innerHTML = event.status == 1 ? "Moving" : "Stand still";
+        document.getElementById("statusImg").src = status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
 			}).bind(this));
 
 			// Listen for messages
@@ -68,25 +72,13 @@
 					document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
 
 					if(measures.length == 10){
-						let smaValue = sma(measures);	
-						let steps = step(measures, smaValue);
-						let status = getStatus(steps);
-
-						document.getElementById("sma").innerHTML = "SMA: "+smaValue;
-						document.getElementById("steps").innerHTML = "Steps: "+steps;
-                        document.getElementById("statusText").innerHTML = status == 1 ? "Moving" : "Stand still";
-                        document.getElementById("statusImg").src = status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
-                        
-                        socket.send(JSON.stringify({
+            socket.send(JSON.stringify({
 							action: "store", 
 							message:{
-								ts: Date.now(), 
-								id: id, 
-								measures: measures, 
-								steps: steps, 
-								sma: smaValue, 
-								status: status, 
-								isCloudBased: false
+							ts: Date.now(), 
+							id: id, 
+							measures: measures, 
+							isCloudBased: true
 							}
 						}));
 
@@ -173,7 +165,7 @@
 
 <!-- Second Container -->
 <div class="container-fluid bg-2 text-center">
-  <h3 class="margin">Measures: </h3>
+  <h3 id="update" class="margin">Measures: </h3>
   <p id="samples">Samples:</p>
   <p id="sma">SMA: </p>
   <p id="steps">Steps: </p>
