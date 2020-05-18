@@ -72,9 +72,9 @@ window.onload = function(){
 		}).bind(this));
 
 		// Listen for messages
-		socket.addEventListener('error', function (event) {
+		socket.addEventListener('error', (function (event) {
 			document.getElementById("received").innerHTML = "Received: "+event.data;
-		});
+		}).bind(this));
 
 		navigator.permissions.query({ name: 'accelerometer' }).then(result => {
 			if (result.state === 'denied') {
