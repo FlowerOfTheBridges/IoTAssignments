@@ -51,7 +51,7 @@
 
 				sensor.start();
 
-				sensor.onreading = () => ({
+				sensor.onreading = (() => {
 					document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
 					document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
 					document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
