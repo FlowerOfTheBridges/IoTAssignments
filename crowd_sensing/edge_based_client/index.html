@@ -48,7 +48,6 @@
 				let sensor = new LinearAccelerationSensor({frequency: 1});
 
 				var measures = [];
-				var samples = 0;
 
 				sensor.start();
 
@@ -63,11 +62,12 @@
 
 					if(measures.length == 10){
 						let sma = this.sma(measures);	
-						let steps = this.step(sma);
+						let steps = this.step(measures, sma);
+						let status = getStatus(steps);
 
 						document.getElementById("sma").innerHTML = "SMA: "+sma;
 						document.getElementById("step").innerHTML = "STEP: "+steps;
-						document.getElementById("status").innerHTML = "Status: "+ (getStatus(steps) == 1 ? "Moving" : "Stand still");
+						document.getElementById("status").innerHTML = "Status: "+ ( status == 1 ? "Moving" : "Stand still");
 						socket.send(JSON.stringify({
 							action: "store", 
 							message:{
@@ -76,10 +76,11 @@
 								measures: measures, 
 								steps: steps, 
 								sma: sma, 
-								status: steps >= 1.5 ? 1 : 0, 
+								status: status, 
 								isCloudBased: false
 							}
 						}));
+
 						measures = [];
 					}
 				}
