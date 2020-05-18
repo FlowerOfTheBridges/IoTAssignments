@@ -67,9 +67,9 @@ window.onload = function(){
 		}).bind(this));
 
 		// Listen for messages
-		socket.addEventListener('message', function (event) {
+		socket.addEventListener('message', (function (event) {
 			document.getElementById("received").innerHTML = "Received: "+event.data;
-		});
+		}).bind(this));
 
 		// Listen for messages
 		socket.addEventListener('error', function (event) {
