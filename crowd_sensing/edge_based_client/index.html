@@ -51,7 +51,7 @@
 
 				sensor.start();
 
-				sensor.onreading = (() => {
+				sensor.onreading = () => {
 					document.getElementById("x").innerHTML = "Acceleration along X-axis: " + sensor.x;
 					document.getElementById("y").innerHTML = "Acceleration along Y-axis: " + sensor.y;
 					document.getElementById("z").innerHTML = "Acceleration along Z-axis: " + sensor.z;
@@ -61,11 +61,11 @@
 					document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
 
 					if(measures.length == 10){
-						let sma = this.sma(measures);	
-						let steps = this.step(measures, sma);
+						let smaValue = sma(measures);	
+						let steps = step(measures, smaValue);
 						let status = getStatus(steps);
 
-						document.getElementById("sma").innerHTML = "SMA: "+sma;
+						document.getElementById("sma").innerHTML = "SMA: "+smaValue;
 						document.getElementById("step").innerHTML = "STEP: "+steps;
 						document.getElementById("status").innerHTML = "Status: "+ ( status == 1 ? "Moving" : "Stand still");
 						socket.send(JSON.stringify({
@@ -75,7 +75,7 @@
 								id: id, 
 								measures: measures, 
 								steps: steps, 
-								sma: sma, 
+								sma: smaValue, 
 								status: status, 
 								isCloudBased: false
 							}
@@ -83,7 +83,7 @@
 
 						measures = [];
 					}
-				}).bind(this);
+				};
 
 				sensor.onerror = event => console.log(event.error.name, event.error.message);
 			});
