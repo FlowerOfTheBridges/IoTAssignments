@@ -18,7 +18,29 @@
         document.getElementById("dashboard").hidden = true;
       }
       else{
+        // Create WebSocket connection.
+			  const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/crowd_sensing');
 
+        // Connection opened
+        socket.addEventListener('open', (function (event) {
+          console.log("connected!");
+        }).bind(this));
+
+        // Listen for messages
+        socket.addEventListener('message', (function (event) {
+          let body = JSON.parse(event.data);
+          document.getElementById("update").innerHTML = "Measures: ("+new Date()+")";
+          document.getElementById("sma").innerHTML = "SMA: "+body.sma;
+          document.getElementById("steps").innerHTML = "Steps: "+body.steps;
+          document.getElementById("statusText").innerHTML = body.status == 1 ? "Moving" : "Stand still";
+          document.getElementById("statusImg").src = body.status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
+        }).bind(this));
+
+        socket.addEventListener('error', (function (err) {
+          let errorDOMElement = document.getElementById("error");
+          errorDOMElement.hidden = false;
+          errorDOMElement.innerHTML = "WebSocket error";
+        }).bind(this));
       }
     }
   </script>

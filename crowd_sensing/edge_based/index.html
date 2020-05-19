@@ -29,7 +29,7 @@
 				sessionStorage.setItem('crowdSensingId', id);
 			}
 			// Create WebSocket connection.
-			const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/prova');
+			const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/crowd_sensing');
 
 			// Connection opened
 			socket.addEventListener('open', (function (event) {
