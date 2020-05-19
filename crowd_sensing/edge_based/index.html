@@ -15,10 +15,9 @@
     const MOVING_IMG_SRC = "https://i.pinimg.com/originals/59/c9/6c/59c96c1e900214c64baec2023ca1e7f1.jpg";
     const STAND_STILL_IMG_SRC = "https://vignette.wikia.nocookie.net/peanuts/images/2/28/AmigosperdemoSono.png/revision/latest/scale-to-width-down/340?cb=20110823202539";
     
-    window.onbeforeunload = function(){
-		sensor && sensor.stop();
+  window.onbeforeunload = function(){
 		socket.close();
-    	return false;
+    return false;
 	}
 	window.onload = function(){
 	
@@ -63,7 +62,7 @@
 					document.getElementById("y").innerHTML = "Y: " + sensor.y;
 					document.getElementById("z").innerHTML = "Z: " + sensor.z;
 
-					measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now});
+					measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now()});
 
 					document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
 
@@ -77,7 +76,7 @@
                         document.getElementById("statusText").innerHTML = status == 1 ? "Moving" : "Stand still";
                         document.getElementById("statusImg").src = status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
                         
-                        socket.send(JSON.stringify({
+            socket.send(JSON.stringify({
 							action: "store", 
 							message:{
 								ts: Date.now(), 

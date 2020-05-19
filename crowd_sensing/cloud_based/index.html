@@ -68,7 +68,7 @@
 					document.getElementById("y").innerHTML = "Y: " + sensor.y;
 					document.getElementById("z").innerHTML = "Z: " + sensor.z;
 
-					measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now});
+					measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now()});
 
 					document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
 

@@ -1,49 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Edge Based Dashboard</title>
+  <title>Edge Based Crowd Sensing</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript">
-    var id = sessionStorage.getItem('crowdSensingId');
-
-    window.onload = function(){
-      if(!id){ // check if user has started crowd sensing session
-        let errorDOMElement = document.getElementById("error");
-        errorDOMElement.hidden = false;
-        errorDOMElement.innerHTML = "No id has been found on your local storage. Please start your crowd sensing session before entering the dashboard.";
-        document.getElementById("dashboard").hidden = true;
-      }
-      else{
-        // Create WebSocket connection.
-			  const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/crowd_sensing');
-
-        // Connection opened
-        socket.addEventListener('open', (function (event) {
-          console.log("connected!");
-        }).bind(this));
-
-        // Listen for messages
-        socket.addEventListener('message', (function (event) {
-          let body = JSON.parse(event.data);
-          document.getElementById("update").innerHTML = "Measures: ("+new Date()+")";
-          document.getElementById("sma").innerHTML = "SMA: "+body.sma;
-          document.getElementById("steps").innerHTML = "Steps: "+body.steps;
-          document.getElementById("statusText").innerHTML = body.status == 1 ? "Moving" : "Stand still";
-          document.getElementById("statusImg").src = body.status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
-        }).bind(this));
-
-        socket.addEventListener('error', (function (err) {
-          let errorDOMElement = document.getElementById("error");
-          errorDOMElement.hidden = false;
-          errorDOMElement.innerHTML = "WebSocket error";
-        }).bind(this));
-      }
-    }
-  </script>
+  <script type="text/javascript" src="../../dashboardutil.js"></script>
+  <script type="text/javascript"  src="index.js"></script>
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 550px}
@@ -62,129 +27,98 @@
 </head>
 <body>
 
-<nav class="navbar navbar-inverse visible-xs">
+  <nav class="navbar navbar-inverse visible-xs">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" id="navHandler" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">Crowd Sensing Dashboard</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li id="overall_mobile" class="active"><a href="#">Overall</a></li>
+          <li id="lasthour_mobile"><a href="#">Last Hour</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
   <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Crowd Sensing Dashboard</a>
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Overall</a></li>
-        <li><a href="#">Last Hour</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <div class="row content">
+      <div class="col-sm-3 sidenav hidden-xs">
+        <h2>Crowd Sensing Dashboard</h2>
+        <ul class="nav nav-pills nav-stacked">
+          <li id="overall" class="active"><a href="#">Overall</a></li>
+          <li id="lasthour"><a href="#">Last Hour</a></li>
+        </ul><br>
+      </div>
+      <br>
+      
+      <div class="col-sm-9">
+        <div hidden id="warning" class="alert alert-warning" role="alert">
+        </div>
+        <div hidden id="error" class="alert alert-danger" role="alert">
+        </div>
+      </div>
+      <div id="dashboard" class="col-sm-9">
+        <!-- USER INFO -->
+        <div id="usersDiv" class="well pre-scrollable">
+          <h4>Users</h4>
+        </div>
+        <!-- SAMPLE INFO -->
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="well" id="samplesDiv" style="overflow-y: scroll; height:150px; width: auto;">
+              <h4>Samples</h4>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="well">
+              <h4>Status</h4>
+              <p id="status"></p> 
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="well">
+              <h4>SMA</h4>
+              <p id="sma"></p> 
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="well">
+              <h4>Steps</h4>
+              <p id="steps"></p> 
+            </div>
+          </div>
+        </div>
+        <!-- ACCELEREMOTER -->
+        <div class="row">
+          <div class="col-sm-4">
+            <div id="x" class="well" style="overflow-y: scroll; height:150px; width: auto;">
+              <h4>X-Axis</h4>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div id="y" class="well" style="overflow-y: scroll; height:150px; width: auto;">
+              <h4>X-Axis</h4>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div id="z" class="well" style="overflow-y: scroll; height:150px; width: auto;">
+              <h4>X-Axis</h4>
+            </div>
+          </div>
+        </div>
 
-<div class="container-fluid">
-  <div class="row content">
-    <div class="col-sm-3 sidenav hidden-xs">
-      <h2>Logo</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#section1">Dashboard</a></li>
-        <li><a href="#section2">Age</a></li>
-        <li><a href="#section3">Gender</a></li>
-        <li><a href="#section3">Geo</a></li>
-      </ul><br>
-    </div>
-    <br>
-    
-    <div class="col-sm-9">
-      <div hidden id="error" class="alert alert-danger" role="alert"></div>
-    </div>
-    <div id="dashboard" class="col-sm-9">
-      <div class="well pre-scrollable">
-        <h4>Dashboard</h4>
-         <input type="radio" id="male" name="gender" value="male">
-		<label for="male">A</label><br>
-		<input type="radio" id="female" name="gender" value="female">
-		<label for="female">B</label><br>
-		<input type="radio" id="other" name="gender" value="other">
-		<label for="other">C</label> 
-      </div>
-      <div class="row">
-        <div class="col-sm-3">
-          <div class="well" style="overflow-y: scroll; height:150px; width: auto;">
-            <h4>Samples:</h4>
-            <input type="radio" id="male" name="gender" value="male">
-		<label for="male">A</label><br>
-		<input type="radio" id="female" name="gender" value="female">
-		<label for="female">B</label><br>
-		<input type="radio" id="other" name="gender" value="other">
-		<label for="other">C</label> <br/>
-        <input type="radio" id="male" name="gender" value="male">
-		<label for="male">A</label><br>
-		<input type="radio" id="female" name="gender" value="female">
-		<label for="female">B</label><br>
-		<input type="radio" id="other" name="gender" value="other">
-		<label for="other">C</label> 
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Pages</h4>
-            <p>100 Million</p> 
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Sessions</h4>
-            <p>10 Million</p> 
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="well">
-            <h4>Bounce</h4>
-            <p>30%</p> 
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p> 
-            <p>Text</p> 
-            <p>Text</p> 
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p> 
-            <p>Text</p> 
-            <p>Text</p> 
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p> 
-            <p>Text</p> 
-            <p>Text</p> 
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-8">
-          <div class="well">
-            <p>Text</p> 
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p> 
-          </div>
-        </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Footer -->
-<footer class="container-fluid bg-4 text-center">
-  <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p> 
-</footer>
+  <!-- Footer -->
+  <footer class="container-fluid bg-4 text-center">
+    <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p> 
+  </footer>
 </body>
 </html>
