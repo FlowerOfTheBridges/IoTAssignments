@@ -74,7 +74,7 @@ function sampleCallback(sampleId) {
     let yDiv = initDiv("y", "Y-Axis");
     let zDiv = initDiv("z", "Z-Axis");
 
-    if(sample.measures){
+    if (sample.measures) {
         sample.measures.forEach(measure => {
             let x = document.createElement("p");
             x.textContent = measure.x.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
@@ -87,7 +87,7 @@ function sampleCallback(sampleId) {
             zDiv.appendChild(z);
         });
     }
-    else{
+    else {
         let x = document.createElement("p");
         x.textContent = "Measures from x-Axis not found(edge based client)";
         xDiv.appendChild(x);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Edge Based Crowd Sensing</title>
   <meta charset="utf-8">
@@ -9,195 +10,118 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" type="module" src="../model.js"></script>
-  <script type="text/javascript">
-
-	var id = sessionStorage.getItem('crowdSensingId');
-    const MOVING_IMG_SRC = "https://i.pinimg.com/originals/59/c9/6c/59c96c1e900214c64baec2023ca1e7f1.jpg";
-    const STAND_STILL_IMG_SRC = "https://vignette.wikia.nocookie.net/peanuts/images/2/28/AmigosperdemoSono.png/revision/latest/scale-to-width-down/340?cb=20110823202539";
-    
-  window.onbeforeunload = function(){
-		socket.close();
-    return false;
-	}
-	window.onload = function(){
-	
-		try{
-			if(!id){
-				console.log("No id found on sessionStorage. Generating ...");
-				id = generateId();
-				sessionStorage.setItem('crowdSensingId', id);
-			}
-			// Create WebSocket connection.
-			const socket = new WebSocket('wss://yvmf1zyr60.execute-api.us-east-1.amazonaws.com/crowd_sensing');
-
-			// Connection opened
-			socket.addEventListener('open', (function (event) {
-    			document.getElementById("userId").innerHTML = id;
-			}).bind(this));
-
-			// Listen for messages
-			socket.addEventListener('message', (function (event) {
-				//document.getElementById("received").innerHTML = "Status ("+(event.data == 1 ? "moving" : "stand still")+") updated correctly.";
-			}).bind(this));
-
-			// Listen for messages
-			socket.addEventListener('error', (function (event) {
-				document.getElementById("received").innerHTML = "Received: "+event.data;
-			}).bind(this));
-
-			navigator.permissions.query({ name: 'accelerometer' }).then(result => {
-				if (result.state === 'denied') {
-					document.getElementById("error").innerHTML = 'Permission to use accelerometer sensor is denied.';
-					return;
-				}
-
-				let sensor = new LinearAccelerationSensor({frequency: 1});
-
-				var measures = [];
-
-				sensor.start();
-
-				sensor.onreading = () => {
-					document.getElementById("x").innerHTML = "X: " + sensor.x;
-					document.getElementById("y").innerHTML = "Y: " + sensor.y;
-					document.getElementById("z").innerHTML = "Z: " + sensor.z;
-
-					measures.push({x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now()});
-
-					document.getElementById("samples").innerHTML = "Samples: "+measures.length+"/10";
-
-					if(measures.length == 10){
-						let smaValue = sma(measures);	
-						let steps = step(measures, smaValue);
-						let status = getStatus(steps);
-
-						document.getElementById("sma").innerHTML = "SMA: "+smaValue;
-						document.getElementById("steps").innerHTML = "Steps: "+steps;
-                        document.getElementById("statusText").innerHTML = status == 1 ? "Moving" : "Stand still";
-                        document.getElementById("statusImg").src = status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
-                        
-            socket.send(JSON.stringify({
-							action: "store", 
-							message:{
-								ts: Date.now(), 
-								id: id, 
-								measures: measures, 
-								steps: steps, 
-								sma: smaValue, 
-								status: status, 
-								isCloudBased: false
-							}
-						}));
-
-						measures = [];
-					}
-				};
-
-				sensor.onerror = event => console.log(event.error.name, event.error.message);
-			});
-		}
-		catch(e){
-			let errorMsg = "";
-		
-			if (error.name === 'SecurityError') {
-				errorMsg = 'Sensor construction was blocked by the Feature Policy.';
-			} else if (error.name === 'ReferenceError') {
-				errorMsg = 'Sensor is not supported by the User Agent.';
-			} else {
-				errorMsg = 'Error: '+e;
-			}
-			document.getElementById("error").innerHTML = errorMsg;
-		}
-	}
-  </script>
+  <script type="text/javascript" src="index.js"></script>
   <style>
-  body {
-    font: 20px Montserrat, sans-serif;
-    line-height: 1.8;
-    color: #f5f6f7;
-  }
-  p {font-size: 16px;}
-  .margin {margin-bottom: 45px;}
-  .bg-1 { 
-    background-color: #1abc9c; /* Green */
-    color: #ffffff;
-  }
-  .bg-2 { 
-    background-color: #474e5d; /* Dark Blue */
-    color: #ffffff;
-  }
-  .bg-3 { 
-    background-color: #ffffff; /* White */
-    color: #555555;
-  }
-  .bg-4 { 
-    background-color: #2f2f2f; /* Black Gray */
-    color: #fff;
-  }
-  .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
-  }
-  .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-  }
-  .navbar-nav  li a:hover {
-    color: #1abc9c !important;
-  }
+    body {
+      font: 20px Montserrat, sans-serif;
+      line-height: 1.8;
+      color: #f5f6f7;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    .margin {
+      margin-bottom: 45px;
+    }
+
+    .bg-1 {
+      background-color: #1abc9c;
+      /* Green */
+      color: #ffffff;
+    }
+
+    .bg-2 {
+      background-color: #474e5d;
+      /* Dark Blue */
+      color: #ffffff;
+    }
+
+    .bg-3 {
+      background-color: #ffffff;
+      /* White */
+      color: #555555;
+    }
+
+    .bg-4 {
+      background-color: #2f2f2f;
+      /* Black Gray */
+      color: #fff;
+    }
+
+    .container-fluid {
+      padding-top: 70px;
+      padding-bottom: 70px;
+    }
+
+    .navbar {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border: 0;
+      border-radius: 0;
+      margin-bottom: 0;
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+
+    .navbar-nav li a:hover {
+      color: #1abc9c !important;
+    }
   </style>
 </head>
+
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-      <a id="userId" class="navbar-brand" href="#"></a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a id="userId" class="navbar-brand" href="#"></a>
+      </div>
+    </div>
+  </nav>
+  <!-- error -->
+  <div class="alert alert-danger" role="alert" id="error" hidden>
+  </div>
+  <!-- First Container -->
+  <div class="container-fluid bg-1 text-center">
+    <h3 class="margin">What am I doing?</h3>
+    <img id="statusImg"
+      src="https://i.pinimg.com/236x/4d/d9/c5/4dd9c582974877a5fe5e7788590aebf7--patchouli-essential-oil-orange-essential-oil.jpg"
+      class="img-responsive img-circle margin" style="display:inline" alt="status" width="350" height="350">
+    <h3 id="statusText">Waiting...</h3>
+  </div>
+
+  <!-- Second Container -->
+  <div class="container-fluid bg-2 text-center">
+    <h3 class="margin">Measures: </h3>
+    <p id="samples">Samples:</p>
+    <p id="sma">SMA: </p>
+    <p id="steps">Steps: </p>
+  </div>
+
+  <!-- Third Container (Grid) -->
+  <div class="container-fluid bg-3 text-center">
+    <h3 class="margin">Accelerometer:</h3><br>
+    <div class="row">
+      <div class="col-sm-4">
+        <p id="x">x</p>
+      </div>
+      <div class="col-sm-4">
+        <p id="y">y</p>
+      </div>
+      <div class="col-sm-4">
+        <p id="z">z</p>
+      </div>
     </div>
   </div>
-</nav>
 
-<!-- First Container -->
-<div class="container-fluid bg-1 text-center">
-  <h3 class="margin">What am I doing?</h3>
-  <img id="statusImg" src="https://i.pinimg.com/236x/4d/d9/c5/4dd9c582974877a5fe5e7788590aebf7--patchouli-essential-oil-orange-essential-oil.jpg" class="img-responsive img-circle margin" style="display:inline" alt="status" width="350" height="350">
-  <h3 id="statusText">Waiting...</h3>
-</div>
-
-<!-- Second Container -->
-<div class="container-fluid bg-2 text-center">
-  <h3 class="margin">Measures: </h3>
-  <p id="samples">Samples:</p>
-  <p id="sma">SMA: </p>
-  <p id="steps">Steps: </p>
-</div>
-
-<!-- Third Container (Grid) -->
-<div class="container-fluid bg-3 text-center">    
-  <h3 class="margin">Accelerometer:</h3><br>
-  <div class="row">
-    <div class="col-sm-4">
-      <p id="x">x</p>
-    </div>
-    <div class="col-sm-4"> 
-      <p id="y">y</p>
-    </div>
-    <div class="col-sm-4"> 
-      <p id="z">z</p>
-    </div>
-  </div>
-</div>
-
-<!-- Footer -->
-<footer class="container-fluid bg-4 text-center">
-  <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p> 
-</footer>
+  <!-- Footer -->
+  <footer class="container-fluid bg-4 text-center">
+    <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p>
+  </footer>
 
 </body>
+
 </html>

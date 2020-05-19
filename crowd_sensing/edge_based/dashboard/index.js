@@ -21,7 +21,7 @@ window.onbeforeunload = function () {
 
 window.onload = function () {
 
-    if(!this.request.message.id){ // render only if id has been found within local storage
+    if (!this.request.message.id) { // render only if id has been found within local storage
         let errorDOMElement = document.getElementById("error");
         errorDOMElement.hidden = false;
         errorDOMElement.innerHTML = "No id found within local storage. Make sure that you started a crowd sensing session before entering the dashboard.";
