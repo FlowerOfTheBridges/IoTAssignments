@@ -67,8 +67,8 @@ function sampleCallback(sampleId) {
     sample = currentUser[sampleId];
     console.log("event: %s %o", sampleId, sample);
     document.getElementById("status").textContent = sample.status == 1 ? "MOVING" : "STAND STILL";
-    document.getElementById("sma").textContent = sample.sma.toFixed(3);
-    document.getElementById("steps").textContent = sample.steps.toFixed(3);
+    document.getElementById("sma").textContent = sample.sma ? sample.sma.toFixed(3) : "Not found (edge based client)";
+    document.getElementById("steps").textContent = sample.steps ? sample.steps.toFixed(3) : "Not found (edge based client)";
 
     let xDiv = initDiv("x", "X-Axis");
     let yDiv = initDiv("y", "Y-Axis");
