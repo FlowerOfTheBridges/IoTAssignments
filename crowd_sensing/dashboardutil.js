@@ -74,15 +74,28 @@ function sampleCallback(sampleId) {
     let yDiv = initDiv("y", "Y-Axis");
     let zDiv = initDiv("z", "Z-Axis");
 
-    sample.measures && sample.measures.forEach(measure => {
+    if(samples.measures){
+        sample.measures.forEach(measure => {
+            let x = document.createElement("p");
+            x.textContent = measure.x.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+            xDiv.appendChild(x);
+            let y = document.createElement("p");
+            y.textContent = measure.y.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+            yDiv.appendChild(y);
+            let z = document.createElement("p");
+            z.textContent = measure.z.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+            zDiv.appendChild(z);
+        });
+    }
+    else{
         let x = document.createElement("p");
-        x.textContent = measure.x.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+        x.textContent = "Measures from x-Axis not found(edge based client)";
         xDiv.appendChild(x);
         let y = document.createElement("p");
-        y.textContent = measure.y.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+        y.textContent = "Measures from y-Axis not found(edge based client)";
         yDiv.appendChild(y);
         let z = document.createElement("p");
-        z.textContent = measure.z.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
+        z.textContent = "Measures from z-Axis not found(edge based client)";
         zDiv.appendChild(z);
-    });
+    }
 }
