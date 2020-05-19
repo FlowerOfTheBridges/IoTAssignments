@@ -38,11 +38,12 @@
 
 			// Listen for messages
 			socket.addEventListener('message', (function (event) {
+        let body = JSON.parse(event.data);
         document.getElementById("update").innerHTML = "Measures: ("+new Date()+")";
-				document.getElementById("sma").innerHTML = "SMA: "+event;
-        document.getElementById("steps").innerHTML = "Steps: "+event;
-        document.getElementById("statusText").innerHTML = 0 == 1 ? "Moving" : "Stand still";
-        document.getElementById("statusImg").src = 0 == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
+				document.getElementById("sma").innerHTML = "SMA: "+body.sma;
+        document.getElementById("steps").innerHTML = "Steps: "+body.steps;
+        document.getElementById("statusText").innerHTML = body.status == 1 ? "Moving" : "Stand still";
+        document.getElementById("statusImg").src = body.status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
 			}).bind(this));
 
 			// Listen for messages
