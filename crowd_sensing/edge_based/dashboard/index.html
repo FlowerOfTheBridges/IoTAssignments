@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Edge Based Dashboard</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    var id = sessionStorage.getItem('crowdSensingId');
+
+    window.onload = function(){
+      if(!id){ // check if user has started crowd sensing session
+        let errorDOMElement = document.getElementById("error");
+        errorDOMElement.hidden = false;
+        errorDOMElement.innerHTML = "No id has been found on your local storage. Please start your crowd sensing session before entering the dashboard.";
+        document.getElementById("dashboard").hidden = true;
+      }
+      else{
+
+      }
+    }
+  </script>
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 550px}
@@ -59,7 +74,10 @@
     </div>
     <br>
     
-    <div class="col-sm-9 pre-scrollable">
+    <div class="col-sm-9">
+      <div hidden id="error" class="alert alert-danger" role="alert"></div>
+    </div>
+    <div id="dashboard" class="col-sm-9">
       <div class="well pre-scrollable">
         <h4>Dashboard</h4>
          <input type="radio" id="male" name="gender" value="male">
@@ -144,6 +162,9 @@
     </div>
   </div>
 </div>
-
+<!-- Footer -->
+<footer class="container-fluid bg-4 text-center">
+  <p>Bootstrap Theme Made By <a href="https://www.w3schools.com">www.w3schools.com</a></p> 
+</footer>
 </body>
 </html>
