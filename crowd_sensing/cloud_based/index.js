@@ -27,9 +27,8 @@ window.onload = function () {
         // Listen for messages
         socket.addEventListener('message', (function (event) {
             let body = JSON.parse(event.data);
-            document.getElementById("update").innerHTML = "Measures: (" + new Date() + ")";
-            document.getElementById("sma").innerHTML = "SMA: " + body.sma;
-            document.getElementById("steps").innerHTML = "Steps: " + body.steps;
+            document.getElementById("update").innerHTML = "Measures: (" + new Date().toLocaleString() + ")";
+            
             document.getElementById("statusText").innerHTML = body.status == 1 ? "Moving" : "Stand still";
             document.getElementById("statusImg").src = body.status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
         }).bind(this));
