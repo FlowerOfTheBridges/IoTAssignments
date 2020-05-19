@@ -74,7 +74,7 @@ function sampleCallback(sampleId) {
     let yDiv = initDiv("y", "Y-Axis");
     let zDiv = initDiv("z", "Z-Axis");
 
-    if(samples.measures){
+    if(sample.measures){
         sample.measures.forEach(measure => {
             let x = document.createElement("p");
             x.textContent = measure.x.toFixed(3) + (measure.ts ? " (" + measure.ts.toLocaleString() + ")" : "");
