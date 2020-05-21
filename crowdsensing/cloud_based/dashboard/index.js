@@ -28,12 +28,13 @@ window.onload = function () {
     // Connection opened
     socket.addEventListener('open', (function (event) {
         console.log("connected to aws websocket!");
-        //first request
+        console.log("sending request: %o", request);
         socket.send(JSON.stringify(request));
     }).bind(this));
 
     // Listen for messages
     socket.addEventListener('message', (function (event) {
+        console.log("received %s: ", event.data);
         crowd = JSON.parse(event.data);
         console.log("received body: %o", crowd);
         let users = initDiv("usersDiv", "Users");
@@ -54,6 +55,7 @@ window.onload = function () {
     }).bind(this));
 
     socket.addEventListener('error', (function (err) {
+        console.log("received error %s: ", err);
         let errorDOMElement = document.getElementById("error");
         errorDOMElement.hidden = false;
         errorDOMElement.innerHTML = "WebSocket error";
