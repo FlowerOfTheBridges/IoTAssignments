@@ -26,5 +26,10 @@ function generateId() {
 }
 
 function getStatus(sma) {
-    return sma >= 1.5;
+    if(sma >= 1.5){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
