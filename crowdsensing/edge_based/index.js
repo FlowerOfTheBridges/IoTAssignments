@@ -25,7 +25,7 @@ window.onload = function () {
 
         // Listen for messages
         socket.addEventListener('message', (function (event) {
-            console.log("Received: %s" + event.body);
+            console.log("Received: %s" + event.data);
         }).bind(this));
 
         // Listen for ws errors
