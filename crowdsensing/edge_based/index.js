@@ -58,11 +58,9 @@ window.onload = function () {
 
                 if (measures.length == 10) {
                     let smaValue = sma(measures);
-                    let steps = step(measures, smaValue);
-                    let status = getStatus(steps);
+                    let status = getStatus(smaValue);
 
                     document.getElementById("sma").innerHTML = "SMA: " + smaValue;
-                    document.getElementById("steps").innerHTML = "Steps: " + steps;
                     document.getElementById("statusText").innerHTML = status == 1 ? "Moving" : "Stand still";
                     document.getElementById("statusImg").src = status == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
 

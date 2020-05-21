@@ -8,16 +8,6 @@ function sma(measures) {
     return sum / measures.length;
 }
 
-function step(measures, sma) {
-    let sum = 0;
-
-    measures.forEach(measure => {
-        sum += Math.pow(Math.abs(measure.x) + Math.abs(measure.y) + Math.abs(measure.z) - sma, 2);
-    });
-
-    return Math.sqrt(sum / measures.length);
-}
-
 /**
  * http://www.ietf.org/rfc/rfc4122.txt
  */
@@ -35,11 +25,6 @@ function generateId() {
     return uuid;
 }
 
-function getStatus(steps) {
-    if (steps > 1.5) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
+function getStatus(sma) {
+    return sma >= 1.5;
 }

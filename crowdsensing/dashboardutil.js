@@ -57,7 +57,6 @@ function userCallback(userId) {
 function clearAnalytics() {
     document.getElementById("status").textContent = "";
     document.getElementById("sma").textContent = "";
-    document.getElementById("steps").textContent = "";
     initDiv("x", "X-Axis");
     initDiv("y", "Y-Axis");
     initDiv("z", "Z-Axis");
@@ -68,8 +67,7 @@ function sampleCallback(sampleId) {
     console.log("event: %s %o", sampleId, sample);
     document.getElementById("status").textContent = sample.status == 1 ? "MOVING" : "STAND STILL";
     document.getElementById("sma").textContent = sample.sma ? sample.sma.toFixed(3) : "Not found (edge based client)";
-    document.getElementById("steps").textContent = sample.steps ? sample.steps.toFixed(3) : "Not found (edge based client)";
-
+   
     let xDiv = initDiv("x", "X-Axis");
     let yDiv = initDiv("y", "Y-Axis");
     let zDiv = initDiv("z", "Z-Axis");
