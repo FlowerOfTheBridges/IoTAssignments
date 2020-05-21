@@ -27,8 +27,8 @@ window.onload = function () {
         // Listen for messages
         socket.addEventListener('message', (function (event) {
             document.getElementById("update").innerHTML = "Measures: (" + new Date().toLocaleString() + ")";
-            document.getElementById("statusText").innerHTML = event.body == 1 ? "Moving" : "Stand still";
-            document.getElementById("statusImg").src = event.body == 1 ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
+            document.getElementById("statusText").innerHTML = event.data == true ? "Moving" : "Stand still";
+            document.getElementById("statusImg").src = event.data == true ? MOVING_IMG_SRC : STAND_STILL_IMG_SRC;
         }).bind(this));
 
         // Listen for errors
