@@ -46,7 +46,7 @@ window.onload = function () {
             var measures = [];
 
             sensor.start();
-
+            /** for each sample, the sensor will call the function associated to the onreading evt listener */
             sensor.onreading = () => {
                 document.getElementById("x").innerHTML = "X: " + sensor.x;
                 document.getElementById("y").innerHTML = "Y: " + sensor.y;
@@ -55,7 +55,7 @@ window.onload = function () {
                 measures.push({ x: sensor.x, y: sensor.y, z: sensor.z, ts: Date.now() });
 
                 document.getElementById("samples").innerHTML = "Samples: " + measures.length + "/10";
-
+                /** when we get ten samples, we perform the model */
                 if (measures.length == 10) {
                     let smaValue = sma(measures);
                     let status = getStatus(smaValue);

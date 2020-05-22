@@ -1,3 +1,8 @@
+/**
+ * Compute the discrete Signal Magnitude Area over a set of discrete samples
+ * @param {array} measures where elements are JSON objects like {x: number, y: number, z: number}
+ * @returns {number} the corresponding SMA
+ */
 function sma(measures) {
     let sum = 0;
 
@@ -9,6 +14,7 @@ function sma(measures) {
 }
 
 /**
+ * Generate a universal unique identifier based on the rfc4122 spec
  * http://www.ietf.org/rfc/rfc4122.txt
  */
 function generateId() {
@@ -25,6 +31,11 @@ function generateId() {
     return uuid;
 }
 
+/**
+ * Returns the status associated to a particular SMA measure
+ * @param {number} sma 
+ * @returns {number} 1 if user is moving, 0 if user is standing still
+ */
 function getStatus(sma) {
     if(sma >= 1.5){
         return 1;

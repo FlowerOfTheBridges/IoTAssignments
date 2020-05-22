@@ -111,6 +111,10 @@ The folder *crowdsensing* contains a *crowdsensing environment* that detects if 
     * cookie must be enabled to give the possibility to the application to store the session identifier.
   * a dashboard where the user can see informations about the current session, such as the various samples that has been stored and the corresponding status, along with the accelerometer information
 All those pages can be found on *GitHub pages* at the following links:
+* [Edge Based Mobile Client](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/edge_based/)
+* [Edge Based Mobile Dashboard](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/cloud_based/)
+* [Cloud Based Mobile Client](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/edge_based/dashboard/)
+* [Cloud Based Mobile Dashboard](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/cloud_based/dashboard)
 
 ### About the model
 The activity recognition model computes the [*Signal Magnitude Area* (*SMA*)](https://en.wikipedia.org/wiki/Signal_magnitude_area). If the *SMA* is below a given threshold of 1.5, it means that the user is standing still, otherwise is moving.

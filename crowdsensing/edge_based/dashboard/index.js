@@ -4,6 +4,9 @@ var tid = null;
 var crowd = null;
 var currentUser = null;
 
+/**
+ * JSON object sended through the WS connection
+ */
 var request = {
     action: "getsamples",
     message: {
@@ -63,6 +66,7 @@ window.onload = function () {
         }
     }).bind(this));
 
+    // Listen for errors
     socket.addEventListener('error', (function (err) {
         let errorDOMElement = document.getElementById("error");
         errorDOMElement.hidden = false;

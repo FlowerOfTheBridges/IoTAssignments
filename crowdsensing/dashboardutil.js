@@ -1,3 +1,9 @@
+/** This file contains functions used to draw the dashboard */
+
+/**
+ * Set the active item within the navbar
+ * @param {string} section if specified, it means that the mobile navbar must be considered
+ */
 function setModes(section) {
     let overall = document.getElementById("overall" + (section != null ? "_mobile" : ""));
     let lastHour = document.getElementById("lasthour" + (section != null ? "_mobile" : ""));
@@ -9,11 +15,25 @@ function setModes(section) {
     lastHourLink.addEventListener("click", () => { overall.setAttribute("class", ""); lastHour.setAttribute("class", "active"); changeMode(true); });
 }
 
+/**
+ * Change the operating mode of the dashboard (overall/last hour)
+ * @param {boolean} value true if we want data from last hour, false otherwise
+ */
 function changeMode(value) {
     request.message.lastHour = value;
     console.log("sending: %o", request);
     socket.send(JSON.stringify(request));
 }
+
+/**
+ * Create radio element within the page
+ * @param {string} div name of the div which will be used 
+ * @param {string} id identifier of the element in the dom
+ * @param {string} name of the radio group 
+ * @param {string} value that will be passed to the callback
+ * @param {string} text content to be viewed
+ * @param {function} callback raised by the onchange evt listener
+ */
 function createRadio(div, id, name, value, text, callback) {
     if (!document.getElementById(id)) {
         let radio = radioInput = document.createElement('input');
@@ -31,6 +51,11 @@ function createRadio(div, id, name, value, text, callback) {
     }
 }
 
+/**
+ * Remove all elements from a div
+ * @param {string} divId 
+ * @param {string} titleDiv 
+ */
 function initDiv(divId, titleDiv) {
     let divDom = document.getElementById(divId);
     if (divDom) {
@@ -41,6 +66,11 @@ function initDiv(divId, titleDiv) {
     }
     return divDom;
 }
+
+/**
+ * Callback to use when we want to show samples from a particular user
+ * @param {string} userId uuid of the user
+ */
 function userCallback(userId) {
     console.log("event: %s %o", userId, crowd[userId]);
     currentUser = crowd[userId];
@@ -54,6 +84,9 @@ function userCallback(userId) {
     });
 }
 
+/**
+ * Clear divs showing axis info
+ */
 function clearAnalytics() {
     document.getElementById("status").textContent = "";
     document.getElementById("sma").textContent = "";
@@ -62,6 +95,10 @@ function clearAnalytics() {
     initDiv("z", "Z-Axis");
 }
 
+/**
+ * Callback to use when we want to show information from a particular sample
+ * @param {string} sampleId must be of the user <uuid_ts> 
+ */
 function sampleCallback(sampleId) {
     sample = currentUser[sampleId];
     console.log("event: %s %o", sampleId, sample);

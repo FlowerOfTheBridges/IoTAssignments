@@ -4,8 +4,11 @@ var tid = null;
 var crowd = null;
 var currentUser = null;
 
+/**
+ * JSON object sended through the WS connection
+ */
 var request = {
-    action: "getsamples",
+    action: "getsamples", // action that the ws endpoint must take 
     message: {
         lastHour: false // latest value by default
     }
@@ -18,6 +21,9 @@ window.onbeforeunload = function () {
     return false;
 }
 
+/**
+ * Function associated to the onload evt listener. 
+ */
 window.onload = function () {
     /** set lasthour - latest request transition  */
     setModes();
@@ -54,6 +60,7 @@ window.onload = function () {
         }
     }).bind(this));
 
+    // Listen for errors
     socket.addEventListener('error', (function (err) {
         console.log("received error %s: ", err);
         let errorDOMElement = document.getElementById("error");
