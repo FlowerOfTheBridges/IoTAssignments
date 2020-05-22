@@ -10,11 +10,12 @@ The folder *crowdsensing* contains a *crowdsensing environment* that detects if 
   * a mobile web application which reads data from the accelerometer and sends its data to the cloud through a WebSocket. In particular:
     * the browser running the page must support the [*Generic Sensor API*](https://www.w3.org/TR/generic-sensor/) and the [*Permissions API*](https://w3c.github.io/permissions/),
     * cookie must be enabled to give the possibility to the application to store the session identifier.
-  * a dashboard where the user can see informations about the current session, such as the various samples that has been stored and the corresponding status, along with the accelerometer information
+  * a dashboard where the user can see informations about the current session, such as the various samples that has been stored and the corresponding status, along with the accelerometer information.
+  
 All those pages can be found on *GitHub pages* at the following links:
 * [Edge Based Mobile Client](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/edge_based/)
-* [Edge Based Mobile Dashboard](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/cloud_based/)
-* [Cloud Based Mobile Client](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/edge_based/dashboard/)
+* [Edge Based Mobile Dashboard](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/edge_based/dashboard)
+* [Cloud Based Mobile Client](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/cloud_based)
 * [Cloud Based Mobile Dashboard](https://flowerofthebridges.github.io/IoTWeatherStation/crowdsensing/cloud_based/dashboard)
 
 ### About the model
